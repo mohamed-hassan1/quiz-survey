@@ -87,7 +87,7 @@ input {
   animation: fadeIn 0.25s linear;
 }
 /*** Start Front Section ***/
-.front-section.active {
+.front-section:not(.active) {
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.3);
   transition: all 0.2s linear;
@@ -113,10 +113,10 @@ input {
 .front-section .start-btn {
   overflow: hidden;
 }
-.front-section.active .inner-content {
+.front-section:not(.active) .inner-content {
   padding-bottom: 0px;
 }
-.front-section.active .logo {
+.front-section:not(.active) .logo {
   width: 120px;
   margin-bottom: 0px;
 }

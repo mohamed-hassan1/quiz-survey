@@ -112,9 +112,15 @@
   // Initial
   function initial() {
     // Call all functions
+    frontSection.classList.add('active');
     fullHeight();
     startBtn();
   }
+
+  window.addEventListener('resize', function() {
+    fullHeight();
+    questionAnimation(questionSection.querySelector('.question.active'), 'resize');
+  });
 
   // Window click event
   window.addEventListener('click', function(e) {
@@ -124,10 +130,9 @@
           menu          = menuContainer.querySelector('.dropdown'),
           count = globalFun.animationSpeed([5,5,5,5], null),
           speed = globalFun.animationSpeed(null, [5,5,5,5]),
-          menuHeight = 218;
-      if (window.innerWidth <= 500) {
-        menuHeight = 168;
-      }
+          currQuestion = questionSection.querySelector('.question.active').getBoundingClientRect().bottom,
+          menuHeight = (window.innerHeight - currQuestion) - 25;
+
       globalFun.heightAnimation(menuHeight, 0, 'up', menu, count, speed, function() {
         menuContainer.classList.remove('active');
         globalFun.clearFilter(menu);
@@ -141,7 +146,7 @@
 
   // Set element height to full window height
   function fullHeight() {
-    let elements = quizWrapper.querySelectorAll('.set-h'),
+    let elements = quizWrapper.querySelectorAll('section.active .set-h'),
         innerInput = questionSection.querySelector('drop-menu'),
         winHeight = window.innerHeight;
     if (winHeight <= 690 && winHeight > 550) {
@@ -211,7 +216,7 @@
           }
         }
         // check inputs
-        if (e.target.classList.contains('answer-input')) {
+        if (e.target.classList.contains('answer-input') && e.target.closest('.question:not(.optional)')) {
           let inputs = globalFun.closest(e.target, 'input-container').querySelectorAll('.answer-input'),
               num = 0;
           if (e.target.value !== "") {
@@ -298,10 +303,9 @@
         let menu = this.querySelector('.dropdown'),
             count = globalFun.animationSpeed([5,5,5,5], null),
             speed = globalFun.animationSpeed(null, [5,5,5,5]),
-            menuHeight = 218;
-        if (window.innerWidth <= 500) {
-          menuHeight = 168;
-        }
+            currQuestion = questionSection.querySelector('.question.active').getBoundingClientRect().bottom,
+            menuHeight = (window.innerHeight - currQuestion) - 25;
+
         if (!this.classList.contains('active')) {
           this.classList.add('active');
           this.classList.add('arrow-active');
@@ -335,10 +339,9 @@
             lbl = menuContainer.querySelector('.input-inner label'),
             count = globalFun.animationSpeed([5,5,5,5], null),
             speed = globalFun.animationSpeed(null, [5,5,5,5]),
-            menuHeight = 218;
-        if (window.innerWidth <= 500) {
-          menuHeight = 168;
-        }
+            currQuestion = questionSection.querySelector('.question.active').getBoundingClientRect().bottom,
+            menuHeight = (window.innerHeight - currQuestion) - 25;
+
         input.value = this.textContent;
         lbl.style.display = 'none';
         globalFun.heightAnimation(menuHeight, 0, 'up', menu, count, speed, function() {
@@ -386,15 +389,20 @@
   // validation function
   function quesValidation(status) {
     let acceptBtn = quizWrapper.querySelector('.accept-btn-container'),
-        currQuestionWidth = quizWrapper.querySelector('.question.active .question-order').offsetWidth;
+        currQuestionWidth = quizWrapper.querySelector('.question.active .question-order').offsetWidth,
+        nxtBtnArrow = quizWrapper.querySelector('.progress-container .arrow-control.next');
     if (status) { // true valid
       acceptBtn.style.left = currQuestionWidth + 'px';
       acceptBtn.classList.add('active');
+      nxtBtnArrow.classList.remove('inactive');
+      nxtBtnArrow.classList.add('active');
     } else { // false unvalid
       acceptBtn.classList.add('fade');
       setTimeout(function() {
         acceptBtn.classList.remove('active');
         acceptBtn.classList.remove('fade');
+        nxtBtnArrow.classList.remove('active');
+        nxtBtnArrow.classList.add('inactive');
       }, 250);
     }
   }
@@ -421,17 +429,19 @@
     }
     let curStyle = document.createElement('style');
     curStyle.id = 'currStyle';
-    if (status === 'next') {
-      progressBarFun(true);
+    if (status === 'next' || status === 'resize') {
+      if (status === 'next') {
+        progressBarFun(true);
+      }
       curStyle.innerHTML = '.questions-section .accept-btn-container.fade {opacity: 0;top: calc(50% + ' + (accTopBtn + 30) + 'px); animation: acceptBtnFade .25s ease-in-out;} .questions-section .accept-btn-container.active {top:calc(50% + ' + accTopBtn + 'px)}.questions-section .question.active {animation: questionAnimation .4s ease-in-out;} @keyframes questionAnimation {0% {top:' + quesNum + 'px; opacity: 0} 100% {top: 50%; opacity: 1;}} @keyframes acceptBtn {0% {top: calc(50% + ' + (accTopBtn + 30) + 'px); opacity: 0;} 100% {top: calc(50% + ' + accTopBtn + 'px); opacity: 1;}} @keyframes acceptBtnFade {0% {top: calc(50% + ' + accTopBtn + 'px); opacity: 1;} 100% {top: calc(50% + ' + (accTopBtn + 30) + 'px); opacity: 0;}}';
       document.head.appendChild(curStyle);
       ques.classList.remove('ready');
       ques.classList.add('active');
-      if (ques.classList.contains('optional')) {
+      if (status === 'next' && ques.classList.contains('optional')) {
         setTimeout(function() {
           quesValidation(true);
         }, 400);
-      } else if (ques.classList.contains('final')) {
+      } else if (status === 'next' && (!ques.classList.contains('optional') && ques.classList.contains('final'))) {
         setTimeout(function() {
           let progress = quizWrapper.querySelector('.progress-container');
           progress.classList.add('done');
@@ -482,6 +492,7 @@
   // Start button
   function startBtn() {
     let btn = frontSection.querySelector('.start-btn button');
+
     // Click event
     btn.addEventListener('click', startBtnClick);
   }
@@ -503,7 +514,6 @@
       count = globalFun.animationSpeed([20,15,13,10], null);
       speed = globalFun.animationSpeed(null, [5,5,5,4]);
       globalFun.heightAnimation(content.offsetHeight, 67, 'up', content, count, speed, function() {
-        frontSection.classList.add('active');
         setTimeout(function() {
           startQuestions();
         }, 100);
@@ -517,9 +527,11 @@
         arrows = progressContainer.querySelectorAll('.arrow-control');
     if (!questionSection.classList.contains('active')) {
       questionSection.classList.add('active');
+      frontSection.classList.remove('active');
+      fullHeight();
       questionSection.querySelector('.question').classList.add('ready');
       arrows[0].classList.add('inactive');
-      arrows[1].classList.add('active');
+      arrows[1].classList.add('inactive');
       questionAnimation(questionSection.querySelector('.question'), 'next');
       setTimeout(function() {
         progressContainer.classList.add('active');
