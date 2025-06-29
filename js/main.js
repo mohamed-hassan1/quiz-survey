@@ -152,9 +152,9 @@
       }
     }
     // add space below questions
-    if (window.innerHeight > 660) {
+    if (innerInput && window.innerHeight > 660) {
       innerInput.style.marginBottom = globalFun.animationSpeed([80,100,130,180], null) + "px";
-    } else {
+    } else if (innerInput && window.innerHeight < 660) {
       innerInput.style.marginBottom = globalFun.animationSpeed([80,100,180,180], null) + "px";
     }
   }
