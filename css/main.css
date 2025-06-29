@@ -143,11 +143,11 @@ input {
 .questions-section .content {
   position: relative;
   align-items: inherit;
+  padding-bottom: 25px;
 }
 .questions-section .inner-content {
   position: relative;
   width: 100%;
-  padding-left: 50px;
 }
 .questions-section h1 {
   font-weight: 500;
@@ -158,9 +158,7 @@ input {
 .questions-section .question-order .icon {
   display: flex;
   align-items: center;
-  padding-bottom: 9px;
-  margin-right: 16px;
-  padding-top: 2px;
+  margin-right: 10px;
 }
 .questions-section .question-order .icon img {
   width: 14px;
@@ -172,7 +170,7 @@ input {
 }
 
 .questions-section .question-order .icon .question-num {
-  font-size: 24px;
+  font-size: 28px;
   margin-right: 2px;
   margin-bottom: 2px;
 }
@@ -348,10 +346,7 @@ input {
   min-height: auto;
   margin-bottom: 8px;
 }
-.questions-section
-  .question-content.choose
-  .input-container.inline
-  .input-inner {
+.questions-section .question-content.choose .input-container.inline .input-inner {
   flex: 0 0 33.33%;
   padding: 0 10px;
 }
@@ -362,19 +357,24 @@ input {
   margin-bottom: 0px;
 }
 .questions-section .question-content .input-inner.in-note .inpute-note {
-  position: absolute;
-  right: 20px;
-  font-size: 31px;
-  bottom: 10px;
+    font-size: 21px;
+    padding: 0 0 10px 15px;
+}
+.questions-section .question-content .input-inner.in-note {
+  display: flex;
+  align-items: end;
+}
+.questions-section .question-content .input-inner.in-note .input-box {
+  flex: 1 1 auto;
 }
 .questions-section .input-inner.in-note label,
 .questions-section .input-inner.in-note input {
-  width: calc(100% - 120px);
+  width: 100%;
 }
 .questions-section .question-content.txtarea .input-inner label {
   font-size: 22px;
   top: 10px;
-  left: 46px;
+  left: 10px;
 }
 .questions-section .input-inner .arrow {
   width: 20px;
@@ -461,6 +461,7 @@ input {
 .questions-section .question.active {
   display: block;
   opacity: 1;
+  z-index: 1;
 }
 .questions-section .question.active2 {
   opacity: 0;
@@ -470,10 +471,8 @@ input {
   margin-bottom: 30px;
   margin-left: 0px;
 }
-.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner
-  input,
-.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner
-  label {
+.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner input,
+.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner label {
   cursor: pointer;
 }
 .questions-section .accept-btn-container {
@@ -520,6 +519,7 @@ input {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  z-index: 0;
 }
 .questions-section .progress-container.active {
   display: flex;
@@ -592,15 +592,7 @@ input {
   height: 100%;
   background-color: rgb(0, 154, 210);
 }
-@media only screen and (min-width: 1600px) {
-  .questions-section .inner-content {
-    padding-left: 0px;
-  }
-}
 @media only screen and (max-width: 991px) {
-  .questions-section .inner-content {
-    padding-left: 10px;
-  }
   .questions-section .accept-btn-container {
     left: 45px;
   }
@@ -612,16 +604,11 @@ input {
   .questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner input,
   .questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner
     label {
-    width: calc(100% - 35px);
+    width: 100%;
     font-size: 23px;
-  }
-  .questions-section .input-inner.in-note label,
-  .questions-section .input-inner.in-note input {
-    width: calc(100% - 135px);
   }
   .questions-section .question-content .input-inner.in-note .inpute-note {
-    right: 45px;
-    font-size: 23px;
+    font-size: 19px;
   }
   .questions-section .question-content.choose .input-container .input-inner .choose-lbl {
     font-size: 18px;
@@ -642,7 +629,7 @@ input {
     font-size: 24px;
   }
   .questions-section .question-order .icon .question-num {
-    font-size: 18px;
+    font-size: 24px;
   }
   .questions-section .question-order .icon img {
     width: 10px;
@@ -654,8 +641,7 @@ input {
     font-size: 15px;
   }
   .questions-section .inner-content {
-    padding-left: 0px;
-    padding-right: 10px;
+    padding: 0px;
   }
   .questions-section .accept-btn-container {
     left: 35px;
@@ -665,6 +651,9 @@ input {
   }
   .questions-section .question-content.choose .input-container.inline .input-inner {
     padding: 0;
+  }
+  .questions-section .accept-btn {
+    font-size: 16px;
   }
 }
 @media only screen and (max-width: 325px) {

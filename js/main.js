@@ -406,7 +406,7 @@
         quesHeight = ques.offsetHeight,
         quesNum = (quesHeight + quesTop) - frontSectionHeight,
         inputContainer = quizWrapper.querySelector('.question.ready .input-container'),
-        accTopBtn = (quesHeight * 0.5) + 20;
+        accTopBtn = (quesHeight * 0.5) + 10;
       if (inputContainer && inputContainer.classList.contains('drop-menu')) {
         accTopBtn = accTopBtn - Number(inputContainer.style.marginBottom.replace("px", ""));
       }
