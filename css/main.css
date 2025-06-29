@@ -4,7 +4,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Crete Round', serif;
+  font-family: "Crete Round", serif;
 
   font-size: 14px;
   background-color: #d2f3ff;
@@ -32,14 +32,14 @@ button {
   font-size: 18px;
   border-radius: 4px;
   cursor: pointer;
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 button:hover {
   background-color: rgb(62, 137, 198);
 }
 button:active {
   outline: none;
-  transform: scale(.97);
+  transform: scale(0.97);
 }
 .col-12 {
   width: 100%;
@@ -52,7 +52,13 @@ button:active {
   width: 100%;
   height: auto;
 }
-h1,h2,h3,h4,h5,h6,p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0 0 10px 0;
 }
 h1 {
@@ -74,27 +80,27 @@ input {
 }
 .fade-out {
   opacity: 0;
-  animation: fadeOut .25s linear;
+  animation: fadeOut 0.25s linear;
 }
 .fade-in {
   opacity: 1;
-  animation: fadeIn .25s linear;
+  animation: fadeIn 0.25s linear;
 }
 /*** Start Front Section ***/
 .front-section.active {
   padding: 10px;
-  background-color: rgba(255,255,255,.3);
-  transition: all .2s linear;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s linear;
 }
 .front-section .inner-content {
   max-width: 510px;
   padding-bottom: 50px;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 }
 .front-section .logo {
   width: 175px;
   margin: 0 auto 15px auto;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 }
 .front-section h3 {
   font-size: 25px;
@@ -147,21 +153,25 @@ input {
   font-weight: 500;
 }
 .questions-section .title {
-  display: flex;
   margin-bottom: 15px;
-  align-items: center;
 }
-.questions-section .title .icon {
+.questions-section .question-order .icon {
   display: flex;
   align-items: center;
   padding-bottom: 9px;
-  margin-right: 10px;
+  margin-right: 16px;
+  padding-top: 2px;
 }
-.questions-section .title .icon img {
+.questions-section .question-order .icon img {
   width: 14px;
   margin-top: 1px;
 }
-.questions-section .title .icon .question-num {
+
+.questions-section  .question-inner {
+  flex: 1 1 auto;
+}
+
+.questions-section .question-order .icon .question-num {
   font-size: 24px;
   margin-right: 2px;
   margin-bottom: 2px;
@@ -181,6 +191,9 @@ input {
 .questions-section .question.final h2 {
   font-size: 45px;
 }
+.questions-section .question-content {
+  display: flex;
+}
 .questions-section .question-content.txtarea .input-container,
 .questions-section .question-content.txtarea .input-inner {
   min-height: 120px;
@@ -188,11 +201,10 @@ input {
 .questions-section .input-inner textarea,
 .questions-section .input-inner input {
   font-family: inherit;
-  position: absolute;
-  left: 35px;
+  position: relative;
   width: 100%;
   border-bottom: 1px solid #9ecdec;
-  padding-bottom: 10px;
+  padding: 0 0 10px 0;
   z-index: 2;
 }
 .questions-section .question-content.dropdown-menu .input-inner input {
@@ -207,7 +219,7 @@ input {
   color: #1c74bc;
   font-size: 22px;
   border-radius: 4px;
-  background-color: rgba(156, 216, 242,.15);
+  background-color: rgba(156, 216, 242, 0.15);
   outline: none;
 }
 .questions-section .question-content.range .input-inner input {
@@ -247,7 +259,7 @@ input {
 .questions-section .input-inner .choose-lbl,
 .questions-section .input-inner label {
   position: absolute;
-  left: 35px;
+  left: 0px;
   width: 100%;
   font-size: 31px;
   color: #9ecdec;
@@ -317,7 +329,7 @@ input {
   background-image: url(../images/check-mark-blue.png);
 }
 .questions-section .question-content.choose .input-inner .choose-lbl.active {
-  animation: chooseCheck .4s ease-in-out;
+  animation: chooseCheck 0.4s ease-in-out;
 }
 .questions-section .question-content.choose .input-inner .choose-lbl input {
   position: absolute;
@@ -336,7 +348,10 @@ input {
   min-height: auto;
   margin-bottom: 8px;
 }
-.questions-section .question-content.choose .input-container.inline .input-inner {
+.questions-section
+  .question-content.choose
+  .input-container.inline
+  .input-inner {
   flex: 0 0 33.33%;
   padding: 0 10px;
 }
@@ -348,7 +363,7 @@ input {
 }
 .questions-section .question-content .input-inner.in-note .inpute-note {
   position: absolute;
-  right: -35px;
+  right: 20px;
   font-size: 31px;
   bottom: 10px;
 }
@@ -363,22 +378,26 @@ input {
 }
 .questions-section .input-inner .arrow {
   width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center;
   position: absolute;
-  right: -34px;
+  right: 0px;
   top: 50%;
   transform: translateY(-50%);
-  transition: transform .25s linear;
+  transition: transform 0.25s linear;
 }
 .questions-section .dropdown {
   position: absolute;
   top: 52px;
   width: 100%;
-  left: 35px;
+  left: 0px;
   overflow: auto;
   color: #fff;
   height: 0px;
   background-color: #1b74bc;
-  box-shadow: 0 3px 5px 0px rgba(0,0,0,.15);
+  box-shadow: 0 3px 5px 0px rgba(0, 0, 0, 0.15);
   z-index: 1;
 }
 .questions-section .drop-menu.active .dropdown {
@@ -400,7 +419,7 @@ input {
   border-bottom: none;
 }
 .questions-section .dropdown .item:not(:last-child):hover {
-  background-color: rgba(0,0,0,.12);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 .questions-section .dropdown .filter {
   position: relative;
@@ -408,7 +427,7 @@ input {
 }
 .questions-section .dropdown .filter input {
   width: 100%;
-  background-color: rgba(0,0,0,.12);
+  background-color: rgba(0, 0, 0, 0.12);
   color: #fff;
   padding: 8px 15px;
   font-size: 18px;
@@ -449,21 +468,23 @@ input {
 .questions-section .question-icon {
   width: 71px;
   margin-bottom: 30px;
-  margin-left: 35px;
+  margin-left: 0px;
 }
-.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner input,
-.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner label {
+.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner
+  input,
+.questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner
+  label {
   cursor: pointer;
 }
 .questions-section .accept-btn-container {
   display: none;
   position: absolute;
-  left: 85px;
+  left: 15px;
   z-index: 0;
 }
 .questions-section .accept-btn-container.active {
   display: block;
-  animation: acceptBtn .25s ease-in-out;
+  animation: acceptBtn 0.25s ease-in-out;
 }
 .questions-section .inner-acc-btn {
   display: flex;
@@ -503,11 +524,11 @@ input {
 .questions-section .progress-container.active {
   display: flex;
   bottom: 20px;
-  animation: progressContainer .25s linear;
+  animation: progressContainer 0.25s linear;
 }
 .questions-section .progress-container.done {
   opacity: 0;
-  animation: progressContainer2 .25s linear;
+  animation: progressContainer2 0.25s linear;
 }
 .questions-section .progress-container .progress-bar {
   margin-right: 15px;
@@ -523,7 +544,7 @@ input {
   padding: 7px 11px;
   background-color: #1b73bc;
   cursor: pointer;
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   overflow: hidden;
 }
 .questions-section .progress-container .control .arrow-control.inactive::before {
@@ -560,7 +581,7 @@ input {
   height: 4px;
   margin-top: 5px;
   margin-bottom: 4px;
-  background-color: rgba(0, 154, 210,.3);
+  background-color: rgba(0, 154, 210, 0.3);
   overflow: hidden;
 }
 .questions-section .bar .inner-bar {
@@ -586,10 +607,11 @@ input {
   .questions-section .dropdown,
   .questions-section .question-content .input-inner textarea,
   .questions-section .question-content .input-inner input,
-  .questions-section .question-content .input-container .input-inner  .choose-lbl,
+  .questions-section .question-content .input-container .input-inner .choose-lbl,
   .questions-section .question-content .input-container .input-inner label,
   .questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner input,
-  .questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner label {
+  .questions-section .question-content.dropdown-menu .input-container.drop-menu .input-inner
+    label {
     width: calc(100% - 35px);
     font-size: 23px;
   }
@@ -598,14 +620,14 @@ input {
     width: calc(100% - 135px);
   }
   .questions-section .question-content .input-inner.in-note .inpute-note {
-    right: 10px;
+    right: 45px;
     font-size: 23px;
   }
   .questions-section .question-content.choose .input-container .input-inner .choose-lbl {
     font-size: 18px;
   }
   .questions-section .input-inner .arrow {
-    right: 7px;
+    right: 0px;
   }
   .questions-section .question-content:not(.dropdown-menu) {
     margin-top: -60px;
@@ -614,14 +636,15 @@ input {
     min-height: 42px;
   }
 }
+
 @media only screen and (max-width: 500px) {
   .questions-section h2 {
     font-size: 24px;
   }
-  .questions-section .title .icon .question-num {
+  .questions-section .question-order .icon .question-num {
     font-size: 18px;
   }
-  .questions-section .title .icon img {
+  .questions-section .question-order .icon img {
     width: 10px;
   }
   .questions-section .input-inner .arrow {
@@ -658,26 +681,56 @@ input {
 
 /*** Start CSS Animation ***/
 @keyframes fadeOut {
-  0% {opacity: 1;}
-  100% {opacity: 0;}
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 @keyframes fadeIn {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 @keyframes progressContainer {
-  0% {bottom: -32px; opacity: 0;}
-  100% {bottom: 20px; opacity: 1;}
-} 
+  0% {
+    bottom: -32px;
+    opacity: 0;
+  }
+  100% {
+    bottom: 20px;
+    opacity: 1;
+  }
+}
 @keyframes progressContainer2 {
-  0% {bottom: 20px; opacity: 1;}
-  100% {bottom: -32px; opacity: 0;}
+  0% {
+    bottom: 20px;
+    opacity: 1;
+  }
+  100% {
+    bottom: -32px;
+    opacity: 0;
+  }
 }
 @keyframes chooseCheck {
-  0% {opacity: 1;}
-  25% {opacity: 0.2;}
-  50% {opacity: 1;}
-  75% {opacity: 0.2;}
-  100% {opacity: 1;}
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 /*** End CSS Animation ***/

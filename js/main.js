@@ -1,5 +1,10 @@
 (function() {
   "usestrict";
+
+  let quizWrapper = document.querySelector('.quiz-wrapper'),
+      frontSection = quizWrapper.querySelector('.front-section'),
+      questionSection = quizWrapper.querySelector('.questions-section');
+
   let globalFun = {
     fadeOut: function(ele) { // Fade Out Animation
       ele.classList.add('fade-out');
@@ -114,8 +119,8 @@
   // Window click event
   window.addEventListener('click', function(e) {
     // Hide dropdown menu on click
-    if ((!globalFun.closest(e.target, 'drop-menu') && !globalFun.closest(e.target, 'dropdown')) && document.querySelector('.drop-menu.active')) {
-      let menuContainer = document.querySelector('.drop-menu.active'),
+    if ((!globalFun.closest(e.target, 'drop-menu') && !globalFun.closest(e.target, 'dropdown')) && quizWrapper.querySelector('.drop-menu.active')) {
+      let menuContainer = quizWrapper.querySelector('.drop-menu.active'),
           menu          = menuContainer.querySelector('.dropdown'),
           count = globalFun.animationSpeed([5,5,5,5], null),
           speed = globalFun.animationSpeed(null, [5,5,5,5]),
@@ -126,8 +131,8 @@
       globalFun.heightAnimation(menuHeight, 0, 'up', menu, count, speed, function() {
         menuContainer.classList.remove('active');
         globalFun.clearFilter(menu);
-        if (document.querySelector('.accept-btn-container.active')) {
-          document.querySelector('.accept-btn-container.active').style.zIndex = '0';
+        if (quizWrapper.querySelector('.accept-btn-container.active')) {
+          quizWrapper.querySelector('.accept-btn-container.active').style.zIndex = '0';
         }
       });
       menuContainer.classList.remove('arrow-active');
@@ -136,8 +141,8 @@
 
   // Set element height to full window height
   function fullHeight() {
-    let elements = document.querySelectorAll('.set-h'),
-        innerInput = document.querySelector('.questions-section .drop-menu'),
+    let elements = quizWrapper.querySelectorAll('.set-h'),
+        innerInput = questionSection.querySelector('drop-menu'),
         winHeight = window.innerHeight;
     if (winHeight <= 690 && winHeight > 550) {
       winHeight += 70;
@@ -160,7 +165,6 @@
   }
 
   //Input functions on type
-  let questionSection = document.querySelector('.questions-section');
   questionSection.addEventListener('input', function (e) {
     if (this.classList.contains('active')) {
       if (e.target.classList.contains('txtholder')) {
@@ -173,7 +177,7 @@
           if (e.target.value !== "") {
             e.target.parentElement.querySelector('label').style.display = 'none';
           } else {
-            e.target.parentElement.querySelector('label').style.display = 'block';
+            e.target.parentElement.querySelector('label').style.display = 'inline-block';
           }
         }
         // input numbers maxlength
@@ -247,29 +251,29 @@
   // Enter press
   window.addEventListener('keypress', function(e) {
     if (e.code === "Enter" || e.code == 13) {
-      if (document.querySelector('.questions-section.active') && document.querySelector('.accept-btn-container.active')) {
+      if (questionSection.classList.contains('active') && questionSection.querySelector('.accept-btn-container.active')) {
         acceptBtnFun();
       }
     }
   });
 
   // progress arrow click
-  let progressArrows = document.querySelector('.progress-container .control');
+  let progressArrows = quizWrapper.querySelector('.progress-container .control');
   progressArrows.addEventListener('click', function(e) {
     if (globalFun.closest(e.target, 'arrow-control')) {
       let arrow = globalFun.closest(e.target, 'arrow-control');
       if (arrow.classList.contains('active')) {
         if (arrow.classList.contains('next')) { // next arrow
-          if (document.querySelector('.accept-btn-container.active')) {
+          if (quizWrapper.querySelector('.accept-btn-container.active')) {
             acceptBtnFun();
           } else {
-            if (document.querySelector('.question.active .question-content.choose') && document.querySelector('.question.active .question-content.choose .choose-lbl.active')) {
+            if (quizWrapper.querySelector('.question.active .question-content.choose') && quizWrapper.querySelector('.question.active .question-content.choose .choose-lbl.active')) {
               acceptBtnFun();
             }
           }
         } else if (arrow.classList.contains('back')) { // back arrow
-          let activeQues = document.querySelector('.question.active');
-          if (document.querySelector('.accept-btn-container.active')) {
+          let activeQues = quizWrapper.querySelector('.question.active');
+          if (quizWrapper.querySelector('.accept-btn-container.active')) {
             quesValidation(false);
             setTimeout(function() {
               questionAnimation(activeQues, 'back');
@@ -287,7 +291,7 @@
   });
 
   // Dropdown menu
-  let dropInputs = document.querySelectorAll('.drop-menu');
+  let dropInputs = quizWrapper.querySelectorAll('.drop-menu');
   for (let i = 0; i < dropInputs.length; i++) {
     dropInputs[i].addEventListener('click', function(e) {
       if (!globalFun.closest(e.target, 'dropdown')) {
@@ -301,8 +305,8 @@
         if (!this.classList.contains('active')) {
           this.classList.add('active');
           this.classList.add('arrow-active');
-          if (document.querySelector('.accept-btn-container.active')) {
-            document.querySelector('.accept-btn-container.active').style.zIndex = '-1';
+          if (quizWrapper.querySelector('.accept-btn-container.active')) {
+            quizWrapper.querySelector('.accept-btn-container.active').style.zIndex = '-1';
           }
           globalFun.heightAnimation(menuHeight, 0, 'down', menu, count, speed, null);
         } else {
@@ -310,8 +314,8 @@
           globalFun.heightAnimation(menuHeight, 0, 'up', menu, count, speed, function() {
             self.classList.remove('active');
             globalFun.clearFilter(menu);
-            if (document.querySelector('.accept-btn-container.active')) {
-              document.querySelector('.accept-btn-container.active').style.zIndex = '0';
+            if (quizWrapper.querySelector('.accept-btn-container.active')) {
+              quizWrapper.querySelector('.accept-btn-container.active').style.zIndex = '0';
             }
           });
           this.classList.remove('arrow-active');
@@ -321,7 +325,7 @@
   }
 
   // Select item from dropdown
-  let dropdownItems = document.querySelectorAll('.drop-menu .item');
+  let dropdownItems = quizWrapper.querySelectorAll('.drop-menu .item');
   for (let i = 0; i < dropdownItems.length; i++) {
     dropdownItems[i].addEventListener('click', function() {
       if (!this.classList.contains('hide-item')) {
@@ -341,8 +345,8 @@
           menuContainer.classList.remove('active');
           globalFun.clearFilter(menu);
           quesValidation(true);
-          if (document.querySelector('.accept-btn-container.active')) {
-            document.querySelector('.accept-btn-container.active').style.zIndex = '0';
+          if (quizWrapper.querySelector('.accept-btn-container.active')) {
+            quizWrapper.querySelector('.accept-btn-container.active').style.zIndex = '0';
           }
         });
         menuContainer.classList.remove('arrow-active');
@@ -351,7 +355,7 @@
   }
 
   // Select item from multi choices
-  let multiChoices = document.querySelectorAll('.question-content.choose .input-container');
+  let multiChoices = quizWrapper.querySelectorAll('.question-content.choose .input-container');
   if (multiChoices[0]) {
     for(let i = 0; i < multiChoices.length; i++) {
       multiChoices[i].addEventListener('click', function(e) {
@@ -381,8 +385,10 @@
 
   // validation function
   function quesValidation(status) {
-    let acceptBtn = document.querySelector('.accept-btn-container');
+    let acceptBtn = quizWrapper.querySelector('.accept-btn-container'),
+        currQuestionWidth = quizWrapper.querySelector('.question.active .question-order').offsetWidth;
     if (status) { // true valid
+      acceptBtn.style.left = currQuestionWidth + 'px';
       acceptBtn.classList.add('active');
     } else { // false unvalid
       acceptBtn.classList.add('fade');
@@ -395,11 +401,11 @@
 
   // Question animation
   function questionAnimation(ques, status) {
-    let frontSectionHeight = document.querySelector('.front-section').offsetHeight,
+    let frontSectionHeight = frontSection.offsetHeight,
         quesTop = ques.getBoundingClientRect().top,
         quesHeight = ques.offsetHeight,
         quesNum = (quesHeight + quesTop) - frontSectionHeight,
-        inputContainer = document.querySelector('.question.ready .input-container'),
+        inputContainer = quizWrapper.querySelector('.question.ready .input-container'),
         accTopBtn = (quesHeight * 0.5) + 20;
       if (inputContainer && inputContainer.classList.contains('drop-menu')) {
         accTopBtn = accTopBtn - Number(inputContainer.style.marginBottom.replace("px", ""));
@@ -427,7 +433,7 @@
         }, 400);
       } else if (ques.classList.contains('final')) {
         setTimeout(function() {
-          let progress = document.querySelector('.progress-container');
+          let progress = quizWrapper.querySelector('.progress-container');
           progress.classList.add('done');
           setTimeout(function() {
             progress.classList.remove('active');
@@ -445,7 +451,7 @@
       let prevQues = ques.previousElementSibling;
       prevQues.classList.add('active2');
       let quesNum2 = prevQues.offsetHeight * 0.5,
-          contentHeight = document.querySelector('.questions-section .content').offsetHeight * 0.5;
+          contentHeight = questionSection.querySelector('.content').offsetHeight * 0.5;
       accTopBtn = quesNum2 + 20;
       inputContainer = prevQues.querySelector('.input-container.drop-menu');
       if (inputContainer) {
@@ -475,14 +481,13 @@
   }
   // Start button
   function startBtn() {
-    let btn = document.querySelector('.start-btn button');
+    let btn = frontSection.querySelector('.start-btn button');
     // Click event
     btn.addEventListener('click', startBtnClick);
   }
   // Start button function on click
   function startBtnClick() {
-    let frontSection = document.querySelector('section.front-section'),
-        content = frontSection.querySelector('.content'),
+    let content = frontSection.querySelector('.content'),
         heading = frontSection.querySelector('.heading'),
         startBtn = frontSection.querySelector('.start-btn'),
         count = globalFun.animationSpeed([5,8,8,8], null),
@@ -508,20 +513,19 @@
   }
   // Start Questions
   function startQuestions() {
-    let questionsSection = document.querySelector('.questions-section'),
-        progressContainer = questionsSection.querySelector('.progress-container'),
+    let progressContainer = quizWrapper.querySelector('.progress-container'),
         arrows = progressContainer.querySelectorAll('.arrow-control');
-    if (!questionsSection.classList.contains('active')) {
-      questionsSection.classList.add('active');
-      questionsSection.querySelector('.question').classList.add('ready');
+    if (!questionSection.classList.contains('active')) {
+      questionSection.classList.add('active');
+      questionSection.querySelector('.question').classList.add('ready');
       arrows[0].classList.add('inactive');
       arrows[1].classList.add('active');
-      questionAnimation(questionsSection.querySelector('.question'), 'next');
+      questionAnimation(questionSection.querySelector('.question'), 'next');
       setTimeout(function() {
         progressContainer.classList.add('active');
       }, 400);
     } else {
-      let currQuestion = questionsSection.querySelector('.question.active');
+      let currQuestion = questionSection.querySelector('.question.active');
       if (currQuestion.nextElementSibling && currQuestion.nextElementSibling.classList.contains('question')) {
         arrows[0].classList.remove('inactive');
         arrows[0].classList.add('active');
@@ -545,10 +549,10 @@
   }
 
   // Accept Button
-  let acceptBtn = document.querySelector('.questions-section .accept-btn');
+  let acceptBtn = quizWrapper.querySelector('.accept-btn');
   acceptBtn.addEventListener('click', acceptBtnFun);
   function acceptBtnFun() {
-    if (!document.querySelector('.question.active .question-content.choose')) {
+    if (!quizWrapper.querySelector('.question.active .question-content.choose')) {
       quesValidation(false);
       setTimeout(function() {
         startQuestions();
@@ -560,13 +564,13 @@
 
   // Progress Bar
   function progressBarFun(status) {
-    let progressBar = document.querySelector('.progress-container');
+    let progressBar = quizWrapper.querySelector('.progress-container');
     if (progressBar.classList.contains('active')) {
       let bar = progressBar.querySelector('.bar'),
           barWidth = bar.offsetWidth,
           innerBar = bar.querySelector('.inner-bar'),
           innerBarWidth = innerBar.offsetWidth,
-          allQues = document.querySelectorAll('.question'),
+          allQues = quizWrapper.querySelectorAll('.question'),
           num = barWidth / (allQues.length - 1),
           percent = Math.ceil(100 / (allQues.length - 1)),
           percentageNum = progressBar.querySelector('.percentage');
