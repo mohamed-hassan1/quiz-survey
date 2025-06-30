@@ -658,10 +658,11 @@
         'question_number:': questionNum,
         'question_title': questionTitle,
         'question_image': questionImage
+      });
 
-      })
+      
 
-    })
+    });
   }
 
 }());
