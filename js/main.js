@@ -45,26 +45,6 @@
         }
       }
     },
-    closest: function(ele, name) {
-      let div = ele;
-      if (!ele.classList.contains(name)) {
-        if (div.parentElement) {
-          div = div.parentElement;
-          while (!div.classList.contains(name)) {
-            if (div.tagName !== "BODY") {
-              div = div.parentElement;
-            } else {
-              return false;
-            }
-          }
-          return div;
-        } else {
-          return false;
-        }
-      } else {
-        return div;
-      }
-    },
     clearFilter: function(dropdown) {
       let input = dropdown.querySelector('input'),
           lbl = dropdown.querySelector('label'),
@@ -125,7 +105,7 @@
   // Window click event
   window.addEventListener('click', function(e) {
     // Hide dropdown menu on click
-    if ((!globalFun.closest(e.target, 'drop-menu') && !globalFun.closest(e.target, 'dropdown')) && quizWrapper.querySelector('.drop-menu.active')) {
+    if ((!e.target.closest('.drop-menu') && !e.target.closest('.dropdown')) && quizWrapper.querySelector('.drop-menu.active')) {
       let menuContainer = quizWrapper.querySelector('.drop-menu.active'),
           menu          = menuContainer.querySelector('.dropdown'),
           count = globalFun.animationSpeed([5,5,5,5], null),
@@ -174,8 +154,8 @@
     if (this.classList.contains('active')) {
       if (e.target.classList.contains('txtholder')) {
         // remove valid class
-        if (globalFun.closest(e.target, 'question').classList.contains('valid')) {
-          globalFun.closest(e.target, 'question').classList.remove('valid');
+        if (e.target.closest('.question').classList.contains('valid')) {
+          e.target.closest('.question').classList.remove('valid');
         }
         // Hide place holder on type
         if (e.target.parentElement.classList.contains('placeholder')) {
@@ -217,7 +197,7 @@
         }
         // check inputs
         if (e.target.classList.contains('answer-input') && e.target.closest('.question:not(.optional)')) {
-          let inputs = globalFun.closest(e.target, 'input-container').querySelectorAll('.answer-input'),
+          let inputs = e.target.closest('.input-container').querySelectorAll('.answer-input'),
               num = 0;
           if (e.target.value !== "") {
             for (let a = 0; a < inputs.length; a++) {
@@ -265,8 +245,8 @@
   // progress arrow click
   let progressArrows = quizWrapper.querySelector('.progress-container .control');
   progressArrows.addEventListener('click', function(e) {
-    if (globalFun.closest(e.target, 'arrow-control')) {
-      let arrow = globalFun.closest(e.target, 'arrow-control');
+    if (e.target.closest('.arrow-control')) {
+      let arrow = e.target.closest('.arrow-control');
       if (arrow.classList.contains('active')) {
         if (arrow.classList.contains('next')) { // next arrow
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
@@ -311,7 +291,7 @@
   let dropInputs = quizWrapper.querySelectorAll('.drop-menu');
   for (let i = 0; i < dropInputs.length; i++) {
     dropInputs[i].addEventListener('click', function(e) {
-      if (!globalFun.closest(e.target, 'dropdown')) {
+      if (!e.target.closest('.dropdown')) {
         let menu = this.querySelector('.dropdown'),
             count = globalFun.animationSpeed([5,5,5,5], null),
             speed = globalFun.animationSpeed(null, [5,5,5,5]),
@@ -345,7 +325,7 @@
   for (let i = 0; i < dropdownItems.length; i++) {
     dropdownItems[i].addEventListener('click', function() {
       if (!this.classList.contains('hide-item')) {
-        let menuContainer = globalFun.closest(this, 'drop-menu'),
+        let menuContainer = this.closest('.drop-menu'),
             menu = menuContainer.querySelector('.dropdown'),
             input = menuContainer.querySelector('.input-inner input'),
             lbl = menuContainer.querySelector('.input-inner label'),
@@ -374,8 +354,8 @@
   if (multiChoices[0]) {
     for(let i = 0; i < multiChoices.length; i++) {
       multiChoices[i].addEventListener('click', function(e) {
-        if (globalFun.closest(e.target, 'choose-lbl')) {
-          let lbl = globalFun.closest(e.target, 'choose-lbl'),
+        if (e.target.closest('.choose-lbl')) {
+          let lbl = e.target.closest('.choose-lbl'),
               inputContainer = e.target.closest('.input-container');
           if (this.classList.contains('done')) {
             inputContainer.querySelector('.choose-lbl.active').classList.remove('active');
@@ -658,11 +638,12 @@
         'question_number:': questionNum,
         'question_title': questionTitle,
         'question_image': questionImage
-      });
 
-      
+      })
 
-    });
+    })
   }
+
+
 
 }());
