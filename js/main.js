@@ -277,18 +277,30 @@
             }
           }
         } else if (arrow.classList.contains('back')) { // back arrow
-          let activeQues = quizWrapper.querySelector('.question.active');
+          let activeQues = quizWrapper.querySelector('.question.active'),
+              prevQues = activeQues.previousElementSibling;
+
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
             quesValidation(false);
             setTimeout(function() {
               questionAnimation(activeQues, 'back');
             },250);
           } else {
+            if (prevQues && (prevQues.querySelector('.question-content.choose') && prevQues.querySelector('.input-container.done'))) {
+              let nextBtn = arrow.parentElement.querySelector('.arrow-control.next');
+              nextBtn.classList.remove('inactive');
+              nextBtn.classList.add('active');
+            }
             questionAnimation(activeQues, 'back');
           }
           if (!activeQues.previousElementSibling.previousElementSibling) {
             arrow.classList.add('inactive');
             arrow.classList.remove('active');
+          }
+
+          if (prevQues.querySelector('.question-content.choose') && prevQues.querySelector('.input-container.done')) {
+            arrow.parentElement.querySelector('.arrow-control.next').classList.add('active');
+            arrow.parentElement.querySelector('.arrow-control.next').classList.remove('inactive');
           }
         }
       }
@@ -364,20 +376,13 @@
       multiChoices[i].addEventListener('click', function(e) {
         if (globalFun.closest(e.target, 'choose-lbl')) {
           let lbl = globalFun.closest(e.target, 'choose-lbl'),
-              inputContainer = globalFun.closest(e.target, 'input-container'),
-              allLbl = inputContainer.querySelectorAll('.choose-lbl');
-          if (!this.classList.contains('done')) {
-            this.classList.add('done');
-          } else {
-            this.classList.remove('done');
-            for (let a = 0; a < allLbl.length; a++) {
-              if (allLbl[a].classList.contains('active')) {
-                allLbl[a].classList.remove('active');
-              }
-            }
+              inputContainer = e.target.closest('.input-container');
+          if (this.classList.contains('done')) {
+            inputContainer.querySelector('.choose-lbl.active').classList.remove('active');
           }
           lbl.classList.add('active');
           lbl.querySelector('input').checked = true;
+          this.classList.add('done');
           setTimeout(function() {
             startQuestions();
           }, 500);
@@ -389,7 +394,8 @@
   // validation function
   function quesValidation(status) {
     let acceptBtn = quizWrapper.querySelector('.accept-btn-container'),
-        currQuestionWidth = quizWrapper.querySelector('.question.active .question-order').offsetWidth,
+        currQues = questionSection.querySelector('.question.active'),
+        currQuestionWidth = currQues.querySelector('.question-order').offsetWidth,
         nxtBtnArrow = quizWrapper.querySelector('.progress-container .arrow-control.next');
     if (status) { // true valid
       acceptBtn.style.left = currQuestionWidth + 'px';
@@ -401,8 +407,10 @@
       setTimeout(function() {
         acceptBtn.classList.remove('active');
         acceptBtn.classList.remove('fade');
-        nxtBtnArrow.classList.remove('active');
-        nxtBtnArrow.classList.add('inactive');
+        if (!((currQues.previousElementSibling && currQues.previousElementSibling.querySelector('.question-content.choose')) && currQues.previousElementSibling.querySelector('.input-container.done'))) {
+          nxtBtnArrow.classList.remove('active');
+          nxtBtnArrow.classList.add('inactive');
+        }
       }, 250);
     }
   }
@@ -537,20 +545,31 @@
         progressContainer.classList.add('active');
       }, 400);
     } else {
-      let currQuestion = questionSection.querySelector('.question.active');
-      if (currQuestion.nextElementSibling && currQuestion.nextElementSibling.classList.contains('question')) {
+      let currQuestion = questionSection.querySelector('.question.active'),
+          nxtQues = currQuestion.nextElementSibling;
+      if (nxtQues && nxtQues.classList.contains('question')) {
         arrows[0].classList.remove('inactive');
         arrows[0].classList.add('active');
         currQuestion.classList.add('done');
+
+        if ((nxtQues.classList.contains('done') || nxtQues.classList.contains('optional')) || (nxtQues.querySelector('.question-content.choose') && nxtQues.querySelector('.input-container.done'))) {
+          arrows[1].classList.add('active');
+          arrows[1].classList.remove('inactive');
+        } else if (arrows[1].classList.contains('active')) {
+          arrows[1].classList.remove('active');
+          arrows[1].classList.add('inactive');
+        }
+
         if (!currQuestion.querySelector('.question-content.choose')) {
           currQuestion.classList.add('valid');
         }
         questionAnimation(currQuestion, 'next2');
+
         setTimeout(function() {
           currQuestion.classList.remove('active');
-          currQuestion.nextElementSibling.classList.add('ready');
-          questionAnimation(currQuestion.nextElementSibling, 'next');
-          if (currQuestion.nextElementSibling.classList.contains('valid')) {
+          nxtQues.classList.add('ready');
+          questionAnimation(nxtQues, 'next');
+          if (nxtQues.classList.contains('valid')) {
             setTimeout(function() {
               quesValidation(true);
             }, 500);
@@ -623,4 +642,26 @@
       }, 30);
     }
   }
+
+  // Get Quiz Results
+  function getFullResults() {
+    let allQuestions = questionSection.querySelectorAll('.question:not(.final)'),
+        results = [];
+
+    allQuestions.forEach(ques => {
+      let questionNum = ques.querySelector('.question-num').textContent,
+          questionTitle = ques.querySelector('.title').textContent,
+          questionImage = ques.querySelector('.question-icon img').src,
+          questionAnswer = ques.querySelectorAll('.answer-input')
+
+      results.push({
+        'question_number:': questionNum,
+        'question_title': questionTitle,
+        'question_image': questionImage
+
+      })
+
+    })
+  }
+
 }());
