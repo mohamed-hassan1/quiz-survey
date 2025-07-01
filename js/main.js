@@ -6,6 +6,7 @@
       questionSection = quizWrapper.querySelector('.questions-section');
 
   let globalFun = {
+    questionsList: [],
     fadeOut: function(ele) { // Fade Out Animation
       ele.classList.add('fade-out');
       setTimeout(function() {
@@ -94,13 +95,48 @@
     // Call all functions
     frontSection.classList.add('active');
     fullHeight();
+    questionsList();
     startBtn();
   }
 
+  // ON Reisze
   window.addEventListener('resize', function() {
     fullHeight();
     questionAnimation(questionSection.querySelector('.question.active'), 'resize');
   });
+
+  // Questions List
+  function questionsList() {
+    let questions = questionSection.querySelectorAll('.question'),
+        arrList = [];
+
+    questions.forEach((item, index) => {
+      let groupStatus = item.hasAttribute('question-group') ? true : false;
+      
+      if (!groupStatus && item.hasAttribute('question-child')) { // Add Sub Questions
+        arrList.forEach(subItem => {
+          if (subItem.question.getAttribute('question-group') == item.getAttribute('question-child')) {
+            let status = false;
+            subItem.question.getAttribute('question-target') === item.getAttribute('question-target') ? status = true : status = false;
+            subItem.sub.push({
+              'question': item,
+              'status': status,
+              'order': index
+            });
+          }
+        })
+      } else if (groupStatus || (!groupStatus && !item.hasAttribute('question-child'))) { // Add Group Questions & none group
+        arrList.push({
+          'group': groupStatus,
+          'question': item,
+          'sub': [],
+          'order': index
+        });
+      }
+    });
+    // Asign
+    globalFun.questionsList = arrList;
+  }
 
   // Window click event
   window.addEventListener('click', function(e) {
