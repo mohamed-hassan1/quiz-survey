@@ -581,7 +581,6 @@
       }, 400);
     } else {
 
-
 /////////////////////////////////////////////////////////////////////////////////
       let currQuestion = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
           nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1].ele;
@@ -589,25 +588,27 @@
         globalFun.questionsList.static.currentIndex += 1;
         arrows[0].classList.remove('inactive');
         arrows[0].classList.add('active');
+        arrows[1].classList.remove('active');
+        arrows[1].classList.add('inactive');
         currQuestion.classList.add('done');
-
-        if ((nxtQues.classList.contains('done') || nxtQues.classList.contains('optional')) || (nxtQues.querySelector('.question-content.choose') && nxtQues.querySelector('.input-container.done'))) {
-          arrows[1].classList.add('active');
-          arrows[1].classList.remove('inactive');
-        } else if (arrows[1].classList.contains('active')) {
-          arrows[1].classList.remove('active');
-          arrows[1].classList.add('inactive');
-        }
 
         if (!currQuestion.querySelector('.question-content.choose')) {
           currQuestion.classList.add('valid');
         }
         questionAnimation(currQuestion, 'next2');
-
         setTimeout(function() {
           currQuestion.classList.remove('active');
           nxtQues.classList.add('ready');
           questionAnimation(nxtQues, 'next');
+        setTimeout(() => {
+          if ((nxtQues.classList.contains('done') || nxtQues.classList.contains('optional')) || (nxtQues.querySelector('.question-content.choose') && nxtQues.querySelector('.input-container.done'))) {
+            arrows[1].classList.add('active');
+            arrows[1].classList.remove('inactive');
+          } else if (arrows[1].classList.contains('active')) {
+            arrows[1].classList.remove('active');
+            arrows[1].classList.add('inactive');
+          }
+        }, 300);
           if (nxtQues.classList.contains('valid')) {
             setTimeout(function() {
               quesValidation(true);
