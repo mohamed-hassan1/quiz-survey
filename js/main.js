@@ -6,7 +6,7 @@
       questionSection = quizWrapper.querySelector('.questions-section');
 
   let globalFun = {
-    questionsList: [],
+    questionsList: {},
     fadeOut: function(ele) { // Fade Out Animation
       ele.classList.add('fade-out');
       setTimeout(function() {
@@ -108,34 +108,40 @@
   // Questions List
   function questionsList() {
     let questions = questionSection.querySelectorAll('.question'),
-        arrList = [];
-
-    questions.forEach((item, index) => {
-      let groupStatus = item.hasAttribute('question-group') ? true : false;
-      
-      if (!groupStatus && item.hasAttribute('question-child')) { // Add Sub Questions
-        arrList.forEach(subItem => {
-          if (subItem.question.getAttribute('question-group') == item.getAttribute('question-child')) {
-            let status = false;
-            subItem.question.getAttribute('question-target') === item.getAttribute('question-target') ? status = true : status = false;
-            subItem.sub.push({
-              'question': item,
-              'status': status,
-              'order': index
-            });
+        questionList = {
+          questions: [],
+          static: {
+            currentIndex: 0,
+            groupTargets: {}
           }
-        })
-      } else if (groupStatus || (!groupStatus && !item.hasAttribute('question-child'))) { // Add Group Questions & none group
-        arrList.push({
-          'group': groupStatus,
-          'question': item,
-          'sub': [],
-          'order': index
+        };
+
+    questions.forEach(item => {
+      if (item.hasAttribute('question-group')) {
+        questionList.questions.push({
+          type: 'group',
+          ele: item,
+          group: item.getAttribute('question-group'),
+          target: item.getAttribute('question-target')
+        });
+        // Add group target questions
+        questionList.static.groupTargets[item.getAttribute("question-group")] = item.getAttribute('question-target');
+      } else if (item.hasAttribute('question-parent')) {
+        questionList.questions.push({
+          type: 'parent',
+          ele: item,
+          parent: item.getAttribute('question-parent'),
+          target: item.getAttribute('question-target')
+        });
+      } else {
+        questionList.questions.push({
+          type: 'general',
+          ele: item,
         });
       }
     });
     // Asign
-    globalFun.questionsList = arrList;
+    globalFun.questionsList = questionList;
   }
 
   // Window click event
@@ -293,8 +299,9 @@
             }
           }
         } else if (arrow.classList.contains('back')) { // back arrow
-          let activeQues = quizWrapper.querySelector('.question.active'),
+          let activeQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
               prevQues = activeQues.previousElementSibling;
+          globalFun.questionsList.static.currentIndex -= 1
 
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
             quesValidation(false);
@@ -400,6 +407,7 @@
           lbl.querySelector('input').checked = true;
           this.classList.add('done');
           setTimeout(function() {
+            //globalFun.questionsList.static.currentIndex += 1;
             startQuestions();
           }, 500);
         }
@@ -438,7 +446,10 @@
         quesHeight = ques.offsetHeight,
         quesNum = (quesHeight + quesTop) - frontSectionHeight,
         inputContainer = quizWrapper.querySelector('.question.ready .input-container'),
-        accTopBtn = (quesHeight * 0.5) + 10;
+        accTopBtn = (quesHeight * 0.5) + 10,
+        nxtArrowBtn = questionSection.querySelector('.arrow-control.next'),
+        backArrowBtn = questionSection.querySelector('.arrow-control.back');
+
       if (inputContainer && inputContainer.classList.contains('drop-menu')) {
         accTopBtn = accTopBtn - Number(inputContainer.style.marginBottom.replace("px", ""));
       }
@@ -499,6 +510,8 @@
       curStyle3.innerHTML = '.questions-section .accept-btn-container.fade {opacity: 0;top: calc(50% + ' + (accTopBtn + 30) + 'px); animation: acceptBtnFade .25s ease-in-out;} .questions-section .accept-btn-container.active {top:calc(50% + ' + accTopBtn + 'px)}  .questions-section .question.ready2 {animation: questionAnimation4 .75s ease-in-out;} .questions-section .question.active2 {animation: questionAnimation3 .5s ease-in-out;} @keyframes questionAnimation3 {0% {top:-' + quesNum2 + 'px; opacity: 0;} 100% {top: 50%; opacity: 1;}} @keyframes questionAnimation4 {0% {top: 50%; opacity: 1;} 100% {top:' + quesNum + 'px; opacity: 0;}} @keyframes acceptBtn {0% {top: calc(50% + ' + (accTopBtn + 30) + 'px); opacity: 0;} 100% {top: calc(50% + ' + accTopBtn + 'px); opacity: 1;}} @keyframes acceptBtnFade {0% {top: calc(50% + ' + accTopBtn + 'px); opacity: 1;} 100% {top: calc(50% + ' + (accTopBtn + 30) + 'px); opacity: 0;}}';
       prevQues.classList.remove('active2');
       document.head.appendChild(curStyle3);
+      backArrowBtn.classList.remove('active');
+      backArrowBtn.classList.add('inactive')
       setTimeout(function() {
         ques.classList.remove('ready2');
         prevQues.classList.remove('done');
@@ -509,6 +522,8 @@
           if (!prevQues.querySelector('.question-content.choose')) {
             quesValidation(true);
           }
+          backArrowBtn.classList.remove('inactive');
+          backArrowBtn.classList.add('active');
         }, 500);
       }, 420);
     }
@@ -553,17 +568,21 @@
       questionSection.classList.add('active');
       frontSection.classList.remove('active');
       fullHeight();
-      questionSection.querySelector('.question').classList.add('ready');
+      globalFun.questionsList.questions[0].ele.classList.add('ready');
       arrows[0].classList.add('inactive');
       arrows[1].classList.add('inactive');
-      questionAnimation(questionSection.querySelector('.question'), 'next');
+      questionAnimation(globalFun.questionsList.questions[0].ele, 'next');
       setTimeout(function() {
         progressContainer.classList.add('active');
       }, 400);
     } else {
-      let currQuestion = questionSection.querySelector('.question.active'),
-          nxtQues = currQuestion.nextElementSibling;
-      if (nxtQues && nxtQues.classList.contains('question')) {
+
+
+/////////////////////////////////////////////////////////////////////////////////
+      let currQuestion = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
+          nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1].ele;
+      if (nxtQues) {
+        globalFun.questionsList.static.currentIndex += 1;
         arrows[0].classList.remove('inactive');
         arrows[0].classList.add('active');
         currQuestion.classList.add('done');
@@ -592,6 +611,9 @@
           }
         }, 450);
       }
+
+//////////////////////////////////////
+
     }
   }
 
@@ -599,6 +621,7 @@
   let acceptBtn = quizWrapper.querySelector('.accept-btn');
   acceptBtn.addEventListener('click', acceptBtnFun);
   function acceptBtnFun() {
+    globalFun.questionsList.static.currentIndex += 1;
     if (!quizWrapper.querySelector('.question.active .question-content.choose')) {
       quesValidation(false);
       setTimeout(function() {
