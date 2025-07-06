@@ -291,6 +291,7 @@
       let arrow = e.target.closest('.arrow-control');
       if (arrow.classList.contains('active')) {
         if (arrow.classList.contains('next')) { // next arrow
+
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
             acceptBtnFun();
           } else {
@@ -466,6 +467,7 @@
     curStyle.id = 'currStyle';
     if (status === 'next' || status === 'resize') {
       if (status === 'next') {
+        
         progressBarFun(true);
       }
       curStyle.innerHTML = '.questions-section .accept-btn-container.fade {opacity: 0;top: calc(50% + ' + (accTopBtn + 30) + 'px); animation: acceptBtnFade .25s ease-in-out;} .questions-section .accept-btn-container.active {top:calc(50% + ' + accTopBtn + 'px)}.questions-section .question.active {animation: questionAnimation .4s ease-in-out;} @keyframes questionAnimation {0% {top:' + quesNum + 'px; opacity: 0} 100% {top: 50%; opacity: 1;}} @keyframes acceptBtn {0% {top: calc(50% + ' + (accTopBtn + 30) + 'px); opacity: 0;} 100% {top: calc(50% + ' + accTopBtn + 'px); opacity: 1;}} @keyframes acceptBtnFade {0% {top: calc(50% + ' + accTopBtn + 'px); opacity: 1;} 100% {top: calc(50% + ' + (accTopBtn + 30) + 'px); opacity: 0;}}';
@@ -522,8 +524,10 @@
           if (!prevQues.querySelector('.question-content.choose')) {
             quesValidation(true);
           }
-          backArrowBtn.classList.remove('inactive');
-          backArrowBtn.classList.add('active');
+          if (globalFun.questionsList.static.currentIndex > 0) {
+            backArrowBtn.classList.remove('inactive');
+            backArrowBtn.classList.add('active');
+          }
         }, 500);
       }, 420);
     }
@@ -621,7 +625,6 @@
   let acceptBtn = quizWrapper.querySelector('.accept-btn');
   acceptBtn.addEventListener('click', acceptBtnFun);
   function acceptBtnFun() {
-    globalFun.questionsList.static.currentIndex += 1;
     if (!quizWrapper.querySelector('.question.active .question-content.choose')) {
       quesValidation(false);
       setTimeout(function() {
