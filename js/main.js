@@ -408,7 +408,6 @@
           lbl.querySelector('input').checked = true;
           this.classList.add('done');
           setTimeout(function() {
-            //globalFun.questionsList.static.currentIndex += 1;
             startQuestions();
           }, 500);
         }
@@ -581,7 +580,8 @@
       }, 400);
     } else {
 
-/////////////////////////////////////////////////////////////////////////////////
+      checkParentQuestions(globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1])
+
       let currQuestion = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
           nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1].ele;
       if (nxtQues) {
@@ -616,10 +616,12 @@
           }
         }, 450);
       }
-
-//////////////////////////////////////
-
     }
+  }
+
+  // Check for parent questions
+  function checkParentQuestions(ques) {
+    console.log(ques)
   }
 
   // Accept Button
