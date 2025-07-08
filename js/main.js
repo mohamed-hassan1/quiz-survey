@@ -579,13 +579,18 @@
         progressContainer.classList.add('active');
       }, 400);
     } else {
-
-      checkParentQuestions(globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1])
-
       let currQuestion = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
           nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1].ele;
-      if (nxtQues) {
+
+      if (currQuestion.hasAttribute('question-group')) {
+        checkParentQuestions('next');
+        nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele;
+      } else if (nxtQues) {
         globalFun.questionsList.static.currentIndex += 1;
+      }
+
+      if (nxtQues) {
+        //globalFun.questionsList.static.currentIndex += 1;
         arrows[0].classList.remove('inactive');
         arrows[0].classList.add('active');
         arrows[1].classList.remove('active');
@@ -596,6 +601,7 @@
           currQuestion.classList.add('valid');
         }
         questionAnimation(currQuestion, 'next2');
+
         setTimeout(function() {
           currQuestion.classList.remove('active');
           nxtQues.classList.add('ready');
@@ -615,7 +621,10 @@
             }, 500);
           }
         }, 450);
+
       }
+
+
     }
   }
 
