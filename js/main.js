@@ -278,8 +278,9 @@
   // Enter press
   window.addEventListener('keypress', function(e) {
     if (e.code === "Enter" || e.code == 13) {
-      if (questionSection.classList.contains('active') && questionSection.querySelector('.accept-btn-container.active')) {
-        acceptBtnFun();
+      if (questionSection.classList.contains('active') && questionSection.querySelector('.accept-btn-container.active button:not(.inactive)')) {
+        ////////
+        acceptBtnFun(questionSection.querySelector('.accept-btn-container.active button:not(.inactive)'));
       }
     }
   });
@@ -293,10 +294,10 @@
         if (arrow.classList.contains('next')) { // next arrow
 
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
-            acceptBtnFun();
+            acceptBtnFun(e);
           } else {
             if (quizWrapper.querySelector('.question.active .question-content.choose') && quizWrapper.querySelector('.question.active .question-content.choose .choose-lbl.active')) {
-              acceptBtnFun();
+              acceptBtnFun(e);
             }
           }
         } else if (arrow.classList.contains('back')) { // back arrow
@@ -424,6 +425,9 @@
     if (status) { // true valid
       acceptBtn.style.left = currQuestionWidth + 'px';
       acceptBtn.classList.add('active');
+      if (acceptBtn.querySelector('button.inactive')) {
+        acceptBtn.querySelector('button.inactive').classList.remove('inactive');
+      }
       nxtBtnArrow.classList.remove('inactive');
       nxtBtnArrow.classList.add('active');
     } else { // false unvalid
@@ -636,13 +640,17 @@
   // Accept Button
   let acceptBtn = quizWrapper.querySelector('.accept-btn');
   acceptBtn.addEventListener('click', acceptBtnFun);
-  function acceptBtnFun() {
-    if (!quizWrapper.querySelector('.question.active .question-content.choose')) {
+  function acceptBtnFun(e) {
+    let btn = e instanceof PointerEvent ? (e.target.closest('button') || this.target.closest('button')) : e;
+    if (!btn.classList.contains('inactive') && !quizWrapper.querySelector('.question.active .question-content.choose')) { // Ok Button
+      
+      btn.classList.add('inactive');
+      // Hide approve button
       quesValidation(false);
       setTimeout(function() {
         startQuestions();
       },250);
-    } else {
+    } else if (!btn.classList.contains('inactive') && quizWrapper.querySelector('.question.active .question-content.choose')) { // Arrow Button
       startQuestions();
     }
   }
@@ -717,7 +725,5 @@
 
     })
   }
-
-
 
 }());

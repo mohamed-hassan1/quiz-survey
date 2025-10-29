@@ -34,10 +34,11 @@ button {
   cursor: pointer;
   transition: all 0.25s ease-in-out;
 }
+.questions-section .progress-container .control .arrow-control.active:hover,
 button:hover {
-  background-color: rgb(62, 137, 198);
+  background-color: #0058a1;
 }
-button:active {
+button:not(.arrow-control):active {
   outline: none;
   transform: scale(0.97);
 }
@@ -558,21 +559,25 @@ input {
   cursor: auto;
   z-index: 1;
 }
-.questions-section .progress-container .control .arrow-control.active:hover {
-  background-color: rgb(62, 137, 198);
-}
 .questions-section .progress-container .control .arrow-control.back {
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
   border-right: 1px solid #9ecdec;
   padding: 7px 10.5px;
 }
 .questions-section .progress-container .control .arrow-control.back img {
   transform: rotate(180deg);
 }
+.questions-section .progress-container .control .arrow-control img {
+  margin-bottom: 1px;
+}
 .questions-section .progress-container .control .arrow-control.next {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 .questions-section .progress-container .progress-bar .bar {
   position: relative;
