@@ -280,8 +280,6 @@
     if (e.code === "Enter" || e.code == 13) {
       if (!questionSection.querySelector('.accept-btn-container .accept-btn.inactive') && questionSection.querySelector('.progress-container.active .arrow-control.next.active')) {
         questionSection.querySelector('.accept-btn-container .accept-btn').classList.add('inactive');
-        console.log('yes')
-        //questionSection.querySelector('.progress-container.active .arrow-control.next.active').click();
         quesValidation(false);
         setTimeout(function() {
           startQuestions();
@@ -305,7 +303,7 @@
               acceptBtnFun(e);
             }
           }
-        } else if (arrow.classList.contains('back')) { // back arrow
+        } else if (arrow.classList.contains('back') && e.pointerType !== "") { // back arrow
           let activeQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
               prevQues = activeQues.previousElementSibling;
           globalFun.questionsList.static.currentIndex -= 1
