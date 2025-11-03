@@ -278,9 +278,14 @@
   // Enter press
   window.addEventListener('keypress', function(e) {
     if (e.code === "Enter" || e.code == 13) {
-      if (questionSection.classList.contains('active') && questionSection.querySelector('.accept-btn-container.active button:not(.inactive)')) {
-        ////////
-        acceptBtnFun(questionSection.querySelector('.accept-btn-container.active button:not(.inactive)'));
+      if (!questionSection.querySelector('.accept-btn-container .accept-btn.inactive') && questionSection.querySelector('.progress-container.active .arrow-control.next.active')) {
+        questionSection.querySelector('.accept-btn-container .accept-btn').classList.add('inactive');
+        console.log('yes')
+        //questionSection.querySelector('.progress-container.active .arrow-control.next.active').click();
+        quesValidation(false);
+        setTimeout(function() {
+          startQuestions();
+        },250);
       }
     }
   });
@@ -643,7 +648,6 @@
   function acceptBtnFun(e) {
     let btn = e instanceof PointerEvent ? (e.target.closest('button') || this.target.closest('button')) : e;
     if (!btn.classList.contains('inactive') && !quizWrapper.querySelector('.question.active .question-content.choose')) { // Ok Button
-      
       btn.classList.add('inactive');
       // Hide approve button
       quesValidation(false);
