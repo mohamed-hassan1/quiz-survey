@@ -39,14 +39,14 @@
       // Get Answer
       let answer = answerBtn.querySelector('.answer-num').getAttribute('data-answernum');
       // Check for right answer
-      if (answers[globalObj.attempt].toLowerCase() === answer.trim().toLowerCase()) { // Right
+      if ((answers[globalObj.attempt].toLowerCase() === answer.trim().toLowerCase()) && (!answerBtn.classList.contains('ready') && !answerBtn.classList.contains('correct'))) { // Right
         answerBtn.classList.add('ready');
         globalObj.rightSymbol(answerBtn.children[0]);
         setTimeout(() => {
           answerBtn.classList.add('correct');
           answerBtn.classList.remove('ready');
         }, 500);
-      } else { // Wrong
+      } else if ((answers[globalObj.attempt].toLowerCase() !== answer.trim().toLowerCase()) && (!answerBtn.classList.contains('ready') && !answerBtn.classList.contains('wrong'))) { // Wrong
         answerBtn.classList.add('ready');
         globalObj.wrongSymbol(answerBtn.children[0]);
         setTimeout(() => {
