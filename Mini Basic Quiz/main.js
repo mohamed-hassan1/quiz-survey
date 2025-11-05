@@ -3,7 +3,8 @@
   // The Right Answers for the 3 Questions Attempts
   const answers = ['a', 'c', 'd'];
 
-  const quizContainer = document.querySelector('.quiz-container');
+  const quizContainer = document.querySelector('.quiz-container'),
+        quizPopup = quizContainer.querySelector('.popup-container');
 
   let globalObj = {
     attempt: 0,
@@ -51,6 +52,12 @@
         setTimeout(() => {
           answerBtn.classList.add('wrong');
           answerBtn.classList.remove('ready');
+          setTimeout(() => {
+            quizPopup.classList.add('ready');
+            setTimeout(() => {
+              quizPopup.classList.add('active');
+            }, 200);
+          }, 125);
         }, 500);
       }
     }
