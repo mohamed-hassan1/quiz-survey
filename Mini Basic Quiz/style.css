@@ -133,7 +133,7 @@ h1,h2,h3,h4,h5,h6,p {
 .quiz-container .slide-answer .wrong-symbol div {
   position: relative;
   height: 2px;
-  background-color: #fff;
+  background-color: #DC2626;
   border-radius: 50%;
   transform: rotate(45deg) translate(6px, 6px);
 }
@@ -142,7 +142,7 @@ h1,h2,h3,h4,h5,h6,p {
   content: '';
   position: absolute;
   height: 2px;
-  background-color: #fff;
+  background-color: #DC2626;
   border-radius: 50%;
   width: 100%;
   transform: rotate(90deg) translate(0px, 0px);
@@ -166,6 +166,7 @@ h1,h2,h3,h4,h5,h6,p {
   font-size: 14px;
 }
 
+.quiz-container .slide-answer.ready,
 .quiz-container .slide-answer:hover {
   color: #00FFD1;
   background-color: #202736;
@@ -181,10 +182,19 @@ h1,h2,h3,h4,h5,h6,p {
   background-color: #DC2626;
 }
 
+.quiz-container .slide-answer.wrong .wrong-symbol div::after,
+.quiz-container .slide-answer.wrong .wrong-symbol div {
+  background-color: #fff;
+}
+
 .quiz-container .answer-inner p {
   margin-bottom: 0;
   font-size: 14px;
   font-weight: 400;
+}
+
+.quiz-container .slide-answer.ready .answer-inner {
+  animation: flash 0.35s linear infinite;
 }
 
 .quiz-container .logo {
@@ -193,4 +203,22 @@ h1,h2,h3,h4,h5,h6,p {
   margin-bottom: 5px;
   display: block;
   font-size: 18px;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0.5;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0.5;
+  }
 }
