@@ -1,15 +1,23 @@
 (function() {
   'use strict';
-  // The Right Answers for the 3 Questions Attempts
-  const answers = ['a', 'c', 'd', 'a'],
+  // The Right Answers and Attempts
+  const answers = ['c', 'b', 'b', 'd'],
         attempts = 3;
 
+  // Quiz Slides
   const quizContainer = document.querySelector('.quiz-container'),
-        quizPopup = quizContainer.querySelector('.popup-container'),
-        quizPopupAttempts = quizPopup.querySelector('.attempt-num'),
-        quizPopupBtn = quizPopup.querySelector('.popup-btn'),
         quizSlides = quizContainer.querySelector('.slides'),
         quizSlidesMargin = 14;
+
+  // Popup
+  const quizPopup = quizContainer.querySelector('.popup-container'),
+        quizPopupAttempts = quizPopup.querySelector('.attempt-num'),
+        quizPopupBtn = quizPopup.querySelector('.popup-btn');
+  
+  // Final Slide
+  const quizFinal = quizContainer.querySelector('.slide.final'),
+        quizAnsRes = quizFinal.querySelector('.ans-results'),
+        quizQuesTotal = quizFinal.querySelector('.total-questions');
 
   let globalObj = {
     // Counters
@@ -43,6 +51,14 @@
       }
     },
 
+    // Check Final Slide and Results
+    quizFinalResults: () => {
+      if (quizSlides.children[globalObj.quizCounter].classList.contains('final')) {
+        quizAnsRes.textContent = Math.abs((attempts - globalObj.attemptCounter) - (quizSlides.children.length - 1));
+        quizQuesTotal.textContent = quizSlides.children.length - 1;
+      }
+    },
+
     // Quiz Slide Move Animation
     quizMoveAnim: () => {
       if (document.head.querySelector('#quizanim')) {
@@ -56,7 +72,9 @@
       anim.innerHTML = `.${quizContainer.className} .${quizSlides.className} {transform:translateX(-${slideSpace}px)}`;
       setTimeout(() => {
         quizSlides.removeAttribute('style');
-        document.head.appendChild(anim)
+        document.head.appendChild(anim);
+        // Check Final Results
+        globalObj.quizFinalResults();
       },125);
     }
   }
@@ -101,8 +119,12 @@
       }
     } else if (popupBtn) { // Close Popup
       quizPopup.classList.remove('active');
+      // Increase Quiz Counter (move to next slide)
+      globalObj.quizCounter += 1;
       setTimeout(() => {
         quizPopup.classList.remove('ready');
+        // Call Slide Move Animation
+        globalObj.quizMoveAnim();
       },190);
     }
   })
