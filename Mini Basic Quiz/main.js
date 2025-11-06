@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   // The Right Answers for the 3 Questions Attempts
-  const answers = ['a', 'c', 'd'],
+  const answers = ['a', 'c', 'd', 'a'],
         attempts = 3;
 
   const quizContainer = document.querySelector('.quiz-container'),
@@ -69,7 +69,7 @@
       // Get Answer
       let answer = answerBtn.querySelector('.answer-num').getAttribute('data-answernum');
       // Check for right answer
-      if ((answers[globalObj.attemptCounter].toLowerCase() === answer.trim().toLowerCase()) && (!answerBtn.classList.contains('ready') && !answerBtn.classList.contains('correct'))) { // Right
+      if ((answers[globalObj.quizCounter].toLowerCase() === answer.trim().toLowerCase()) && (!answerBtn.classList.contains('ready') && !answerBtn.classList.contains('correct'))) { // Right
         answerBtn.classList.add('ready');
         globalObj.rightSymbol(answerBtn.children[0]);
         setTimeout(() => {
@@ -78,7 +78,7 @@
           globalObj.quizCounter += 1;
           globalObj.quizMoveAnim();
         }, 500);
-      } else if ((answers[globalObj.attemptCounter].toLowerCase() !== answer.trim().toLowerCase()) && (!answerBtn.classList.contains('ready') && !answerBtn.classList.contains('wrong'))) { // Wrong
+      } else if ((answers[globalObj.quizCounter].toLowerCase() !== answer.trim().toLowerCase()) && (!answerBtn.classList.contains('ready') && !answerBtn.classList.contains('wrong'))) { // Wrong
         answerBtn.classList.add('ready');
         globalObj.wrongSymbol(answerBtn.children[0]);
         setTimeout(() => {

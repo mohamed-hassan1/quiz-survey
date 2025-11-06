@@ -87,19 +87,23 @@ h1,h2,h3,h4,h5,h6,p {
   margin-bottom: 12px;
 }
 
-.quiz-container .popup-container .popup-box button {
+.quiz-container .btn {
+  display: inline-block;
+  text-align: center;
   background-color: #0cad90;
   color: #fff;
   border-radius: 6px;
   font-size: 15px;
   padding: 7px;
-  min-width: 92px;
+  min-width: 100px;
   border: none;
   cursor: pointer;
+  text-decoration: none;
+  user-select: none;
   transition: transform 0.1s linear;
 }
 
-.quiz-container .popup-container .popup-box button:hover {
+.quiz-container .btn:hover {
   transform: scale(1.04);
 }
 
@@ -226,6 +230,16 @@ h1,h2,h3,h4,h5,h6,p {
 
 .quiz-container .slides .slide:not(:last-child) {
   margin-right: 14px;
+}
+
+.quiz-container .slides .slide.final {
+  padding-top: 20px;
+  text-align: center;
+}
+
+.quiz-container .slides .slide.final .slide-answers p {
+  color: #CBD5E1;
+  margin-bottom: 14px;
 }
 
 @keyframes flash {
