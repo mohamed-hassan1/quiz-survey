@@ -6,13 +6,15 @@
 
   const quizContainer = document.querySelector('.quiz-container'),
         quizPopup = quizContainer.querySelector('.popup-container'),
+        quizPopupAttempts = quizPopup.querySelector('.attempt-num'),
+        quizPopupBtn = quizPopup.querySelector('.popup-btn'),
         quizSlides = quizContainer.querySelector('.slides'),
         quizSlidesMargin = 14;
 
   let globalObj = {
     // Counters
     quizCounter: 0,
-    attemptCounter: 0,
+    attemptCounter: attempts,
     oldSlideSpace: 0,
 
     // Add Right Symbol
@@ -57,14 +59,12 @@
         document.head.appendChild(anim)
       },125);
     }
-
   }
-
-
 
   // Quiz Global Click
   quizContainer.addEventListener('click', function(e) {
-    let answerBtn = e.target.closest('.slide-answer');
+    let answerBtn = e.target.closest('.slide-answer'),
+        popupBtn = e.target.closest('.popup-btn');
     if (answerBtn) {
       // Get Answer
       let answer = answerBtn.querySelector('.answer-num').getAttribute('data-answernum');
@@ -75,7 +75,9 @@
         setTimeout(() => {
           answerBtn.classList.add('correct');
           answerBtn.classList.remove('ready');
+          // Increase Quiz Counter (move to next slide)
           globalObj.quizCounter += 1;
+          // Call Slide Move Animation
           globalObj.quizMoveAnim();
         }, 500);
       } else if ((answers[globalObj.quizCounter].toLowerCase() !== answer.trim().toLowerCase()) && (!answerBtn.classList.contains('ready') && !answerBtn.classList.contains('wrong'))) { // Wrong
@@ -88,10 +90,20 @@
             quizPopup.classList.add('ready');
             setTimeout(() => {
               quizPopup.classList.add('active');
+              globalObj.attemptCounter -= 1;
+              quizPopupAttempts.textContent = globalObj.attemptCounter;
+              if (globalObj.attemptCounter <= 0) {
+                quizPopupBtn.setAttribute('disabled', true);
+              }
             }, 200);
           }, 125);
         }, 500);
       }
+    } else if (popupBtn) { // Close Popup
+      quizPopup.classList.remove('active');
+      setTimeout(() => {
+        quizPopup.classList.remove('ready');
+      },190);
     }
   })
 

@@ -107,6 +107,15 @@ h1,h2,h3,h4,h5,h6,p {
   transform: scale(1.04);
 }
 
+.quiz-container .btn[disabled] {
+  cursor: auto;
+  background-color: #a5a5a5;
+}
+
+.quiz-container .btn[disabled]:hover {
+  transform: none;
+}
+
 .quiz-container {
   max-width: 300px;
   overflow: hidden;
