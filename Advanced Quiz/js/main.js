@@ -732,16 +732,13 @@
           }
         });
       } else if (answerContainer.querySelector('.choose-lbl') && answerContainer.querySelector('input[type=radio]')) { // Choose Inputs
-        console.log(answerContainer.querySelectorAll('input[type=radio]'));
-        console.log(answerContainer.querySelector('input[type=radio]:checked'));
-        console.log(answerContainer.querySelector('input[type=radio]:checked').value);
         questionAnswer = answerContainer.querySelector('input[type=radio]:checked').value;
       }
 
       // Set Questions Results
       results.push({
         'question_number:': index + 1,
-        'question_title': questionTitle,
+        'question_title': questionTitle.trim(),
         'question_image': questionImage ? questionImage.src : '',
         'question_answer': questionAnswer
       });
