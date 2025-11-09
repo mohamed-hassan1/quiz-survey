@@ -357,7 +357,7 @@ input {
 .questions-section .question-content.multi-txt .input-inner:last-child {
   margin-bottom: 0px;
 }
-.questions-section .question-content .input-inner.in-note .inpute-note {
+.questions-section .question-content .input-inner.in-note .input-note {
     font-size: 21px;
     padding: 0 0 10px 15px;
 }
@@ -612,7 +612,7 @@ input {
     width: 100%;
     font-size: 23px;
   }
-  .questions-section .question-content .input-inner.in-note .inpute-note {
+  .questions-section .question-content .input-inner.in-note .input-note {
     font-size: 19px;
   }
   .questions-section .question-content.choose .input-container .input-inner .choose-lbl {

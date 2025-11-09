@@ -710,14 +710,29 @@
 
   // Get Quiz Results
   function getFullResults() {
-    let allQuestions = questionSection.querySelectorAll('.question:not(.final)'),
+    let allQuestions = questionSection.querySelectorAll('.question.done'),
         results = [];
 
     allQuestions.forEach(ques => {
-      let questionNum = ques.querySelector('.question-num').textContent,
-          questionTitle = ques.querySelector('.title').textContent,
+      let questionTitle = ques.querySelector('.title').textContent,
           questionImage = ques.querySelector('.question-icon img').src,
-          questionAnswer = ques.querySelectorAll('.answer-input')
+          answerContainer = ques.querySelector('.question-answer'),
+          questionAnswer = null;
+
+      if (answerContainer.querySelector('.txtholder')) {
+        questionAnswer = [];
+        answerContainer.querySelectorAll('.txtholder').forEach((ans) => {
+          let inputSymobl = ans.closest('.input-inner').querySelector('.input-note');
+          if (inputSymobl) {
+            // Check for Input Symbol (minute, hours... etc)
+            questionAnswer.push([ans.value, inputSymobl.textContent]);
+          } else {
+            questionAnswer.push(ans.value);
+          }
+        });
+      } else if (answerContainer.querySelector('.choose-lbl') && answerContainer.querySelector('input[type=radio]')) {
+        questionAnswer = answerContainer.querySelector('input[type=radio]:checked').value;
+      }
 
       results.push({
         'question_number:': questionNum,
