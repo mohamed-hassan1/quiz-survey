@@ -303,7 +303,8 @@
               acceptBtnFun(e);
             }
           }
-        } else if (arrow.classList.contains('back') && e.pointerType !== "") { // back arrow
+        } else if ((arrow.classList.contains('back') && !arrow.classList.contains('inactive')) && e.pointerType !== "") { // back arrow
+          arrow.classList.add('inactive');
           let activeQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
               prevQues = activeQues.previousElementSibling;
           globalFun.questionsList.static.currentIndex -= 1
