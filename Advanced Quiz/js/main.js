@@ -492,6 +492,7 @@
           setTimeout(function() {
             progress.classList.remove('active');
             progress.classList.remove('done');
+            console.log(getFullResults())
           },250);
         }, 800);
       }
@@ -713,13 +714,13 @@
     let allQuestions = questionSection.querySelectorAll('.question.done'),
         results = [];
 
-    allQuestions.forEach(ques => {
+    allQuestions.forEach((ques, index) => {
       let questionTitle = ques.querySelector('.title').textContent,
-          questionImage = ques.querySelector('.question-icon img').src,
+          questionImage = ques.querySelector('.question-icon img'),
           answerContainer = ques.querySelector('.question-answer'),
           questionAnswer = null;
 
-      if (answerContainer.querySelector('.txtholder')) {
+      if (answerContainer.querySelector('.txtholder')) { // Text Inputs
         questionAnswer = [];
         answerContainer.querySelectorAll('.txtholder').forEach((ans) => {
           let inputSymobl = ans.closest('.input-inner').querySelector('.input-note');
@@ -730,18 +731,24 @@
             questionAnswer.push(ans.value);
           }
         });
-      } else if (answerContainer.querySelector('.choose-lbl') && answerContainer.querySelector('input[type=radio]')) {
+      } else if (answerContainer.querySelector('.choose-lbl') && answerContainer.querySelector('input[type=radio]')) { // Choose Inputs
+        console.log(answerContainer.querySelectorAll('input[type=radio]'));
+        console.log(answerContainer.querySelector('input[type=radio]:checked'));
+        console.log(answerContainer.querySelector('input[type=radio]:checked').value);
         questionAnswer = answerContainer.querySelector('input[type=radio]:checked').value;
       }
 
+      // Set Questions Results
       results.push({
-        'question_number:': questionNum,
+        'question_number:': index + 1,
         'question_title': questionTitle,
-        'question_image': questionImage
-
-      })
-
+        'question_image': questionImage ? questionImage.src : '',
+        'question_answer': questionAnswer
+      });
     })
+
+    return results;
+
   }
 
 }());
