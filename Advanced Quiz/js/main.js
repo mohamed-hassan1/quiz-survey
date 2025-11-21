@@ -667,10 +667,11 @@
           barWidth = bar.offsetWidth,
           innerBar = bar.querySelector('.inner-bar'),
           innerBarWidth = innerBar.offsetWidth,
-          allQues = quizWrapper.querySelectorAll('.question'),
-          num = barWidth / (allQues.length - 1),
-          percent = Math.ceil(100 / (allQues.length - 1)),
-          percentageNum = progressBar.querySelector('.percentage');
+          allQues = quizWrapper.querySelectorAll('.question:not(.invisible-question)'),
+          passQues = quizWrapper.querySelectorAll('.question.done'),
+          percentageNum = progressBar.querySelector('.percentage'),
+          num = (barWidth - innerBarWidth) / ((allQues.length - 1) - (passQues.length - 1)),
+          percent = Math.ceil((100 - Number(percentageNum.textContent)) / ((allQues.length - 1) - (passQues.length - 1)));
 
       if (innerBarWidth === 0 && !innerBar.hasAttribute('data-progress')) {
         innerBar.setAttribute('data-progress', 0);
@@ -693,7 +694,9 @@
           percentageNum.textContent = Number(percentageNum.textContent) + percent;
         }
       } else { // back
-        num = innerBarWidth - num;
+        // Calculate Progress Bar on Back
+        num = Math.ceil(innerBarWidth - (innerBarWidth / (passQues.length)));
+        percent = Math.ceil(Number(percentageNum.textContent) / (passQues.length));
         if ((Number(percentageNum.textContent) - percent) < 0) {
           percentageNum.textContent = 0;
         } else {
