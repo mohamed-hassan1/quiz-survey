@@ -248,7 +248,10 @@
                   if (Number(inputs[a].getAttribute('data-length')) <= inputs[a].value.length) {
                     num++;
                     if (num === inputs.length) {
-                      quesValidation(true);
+                      // Add Slight Delay
+                      setTimeout(() => {
+                        quesValidation(true);
+                      },300)
                     }
                   } else {
                     quesValidation(false);
@@ -426,6 +429,7 @@
         currQues = questionSection.querySelector('.question.active'),
         currQuestionWidth = currQues.querySelector('.question-order').offsetWidth,
         nxtBtnArrow = quizWrapper.querySelector('.progress-container .arrow-control.next');
+
     if (status) { // true valid
       acceptBtn.style.left = currQuestionWidth + 'px';
       acceptBtn.classList.add('active');
@@ -492,7 +496,6 @@
           setTimeout(function() {
             progress.classList.remove('active');
             progress.classList.remove('done');
-            console.log(getFullResults())
           },250);
         }, 800);
       }
