@@ -3,7 +3,8 @@
 
   let quizWrapper = document.querySelector('.quiz-wrapper'),
       frontSection = quizWrapper.querySelector('.front-section'),
-      questionSection = quizWrapper.querySelector('.questions-section');
+      questionSection = quizWrapper.querySelector('.questions-section'),
+      questionsContainer = questionSection.querySelector('.inner-content');
 
   let globalFun = {
     questionsList: {},
@@ -125,13 +126,18 @@
           target: item.getAttribute('question-target')
         });
         // Add group target questions
-        questionList.static.groupTargets[item.getAttribute("question-group")] = item.getAttribute('question-target');
-      } else if (item.hasAttribute('question-parent')) {
+        questionList.static.groupTargets[item.getAttribute("question-group")] = [item.getAttribute('question-target')];
+        // Add question child
+        let questionChild = questionsContainer.querySelector(`.question[question-child=${item.getAttribute("question-group")}]`);
+        questionList.static.groupTargets[item.getAttribute("question-group")].push(questionChild);
+        if (questionChild) {
+          questionChild.classList.add('question-hidden');
+        }
+      } else if (item.hasAttribute('question-child')) {
         questionList.questions.push({
-          type: 'parent',
+          type: 'child',
           ele: item,
-          parent: item.getAttribute('question-parent'),
-          target: item.getAttribute('question-target')
+          child: item.getAttribute('question-child')
         });
       } else {
         questionList.questions.push({
@@ -593,6 +599,25 @@
     } else {
       let currQuestion = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
           nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1].ele;
+      
+        // Check for questions group and childs
+        if (currQuestion.hasAttribute('question-group')) { // Question Group
+          // Get Question answer
+          let questionAnswer = null;
+          if (currQuestion.getAttribute('question-type') === 'selectbox') { // SelectBox
+            questionAnswer = currQuestion.querySelector('.answer-input').value;
+          } else if (currQuestion.getAttribute('question-type') === 'checkbox') { // Checkbox
+            questionAnswer = currQuestion.querySelector('.question-answer input[type=radio]:checked').value;
+          }
+          // Loop through all child questions
+          for (let i in globalFun.questionsList.static.groupTargets) {
+            if (currQuestion.getAttribute('question-group') === i && questionAnswer === globalFun.questionsList.static.groupTargets[i][0]) {
+              // Make child question visible
+              globalFun.questionsList.static.groupTargets[i][1].classList.remove('question-hidden');
+            }
+          }
+        }
+
 
       if (currQuestion.hasAttribute('question-group')) {
         checkParentQuestions('next');
@@ -670,7 +695,7 @@
           barWidth = bar.offsetWidth,
           innerBar = bar.querySelector('.inner-bar'),
           innerBarWidth = innerBar.offsetWidth,
-          allQues = quizWrapper.querySelectorAll('.question:not(.invisible-question)'),
+          allQues = quizWrapper.querySelectorAll('.question:not(.question-hidden)'),
           passQues = quizWrapper.querySelectorAll('.question.done'),
           percentageNum = progressBar.querySelector('.percentage'),
           num = (barWidth - innerBarWidth) / ((allQues.length - 1) - (passQues.length - 1)),
