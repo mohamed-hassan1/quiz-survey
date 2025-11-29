@@ -597,8 +597,11 @@
         progressContainer.classList.add('active');
       }, 400);
     } else {
-      let currQuestion = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
-          nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex + 1].ele;
+      let allQuestions = globalFun.questionsList.questions,
+          questionsIndex = globalFun.questionsList.static.currentIndex,
+          questionsTargets = globalFun.questionsList.static.groupTargets,
+          currQuestion = allQuestions[questionsIndex].ele,
+          nxtQues = null;
       
         // Check for questions group and childs
         if (currQuestion.hasAttribute('question-group')) { // Question Group
@@ -610,21 +613,25 @@
             questionAnswer = currQuestion.querySelector('.question-answer input[type=radio]:checked').value;
           }
           // Loop through all child questions
-          for (let i in globalFun.questionsList.static.groupTargets) {
-            if (currQuestion.getAttribute('question-group') === i && questionAnswer === globalFun.questionsList.static.groupTargets[i][0]) {
+          for (let i in questionsTargets) {
+            if (currQuestion.getAttribute('question-group') === i && questionAnswer === questionsTargets[i][0]) {
               // Make child question visible
-              globalFun.questionsList.static.groupTargets[i][1].classList.remove('question-hidden');
+              questionsTargets[i][1].classList.remove('question-hidden');
+            } else if ((currQuestion.getAttribute('question-group') === i && questionAnswer !== questionsTargets[i][0]) && !questionsTargets[i][1].classList.contains('question-hidden')) {
+              // Make child question hidden
+              questionsTargets[i][1].classList.add('question-hidden');
             }
           }
         }
 
-
-      if (currQuestion.hasAttribute('question-group')) {
-        checkParentQuestions('next');
-        nxtQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele;
-      } else if (nxtQues) {
-        globalFun.questionsList.static.currentIndex += 1;
-      }
+        // Check for the next question
+        for (let i = questionsIndex + 1; i < allQuestions.length; i++) {
+          if (allQuestions[i].type !== 'child' || allQuestions[i].type === 'child' && !allQuestions[i].ele.classList.contains('question-hidden')) {
+            nxtQues = allQuestions[i].ele;
+            globalFun.questionsList.static.currentIndex = i;
+            break;
+          }
+        }
 
       if (nxtQues) {
         //globalFun.questionsList.static.currentIndex += 1;
@@ -661,13 +668,7 @@
 
       }
 
-
     }
-  }
-
-  // Check for parent questions
-  function checkParentQuestions(ques) {
-    console.log(ques)
   }
 
   // Accept Button
