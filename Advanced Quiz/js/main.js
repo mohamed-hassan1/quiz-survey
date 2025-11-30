@@ -8,6 +8,7 @@
 
   let globalFun = {
     questionsList: {},
+    questionCounter: 1,
     fadeOut: function(ele) { // Fade Out Animation
       ele.classList.add('fade-out');
       setTimeout(function() {
@@ -378,6 +379,12 @@
 
           prevQues = getMainQuestion(false, 1, 'move');
 
+          // Set Question Order
+          if (prevQues.querySelector('.question-order .question-num')) {
+            globalFun.questionCounter -= 1;
+            prevQues.querySelector('.question-order .question-num').textContent = globalFun.questionCounter;
+          }
+
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
             quesValidation(false);
             setTimeout(function() {
@@ -644,6 +651,7 @@
       speed = globalFun.animationSpeed(null, [5,5,5,4]);
       globalFun.heightAnimation(content.offsetHeight, 67, 'up', content, count, speed, function() {
         setTimeout(function() {
+          globalFun.questionsList.questions[0].ele.querySelector('.question-order .question-num').textContent = 1;
           startQuestions();
         }, 100);
       });
@@ -697,6 +705,12 @@
         nxtQues = getMainQuestion(true, 1, 'move');
 
       if (nxtQues) {
+        // Set Question Order
+        if (nxtQues.querySelector('.question-order .question-num')) {
+          globalFun.questionCounter += 1;
+          nxtQues.querySelector('.question-order .question-num').textContent = globalFun.questionCounter;
+        }
+
         arrows[0].classList.remove('inactive');
         arrows[0].classList.add('active');
         arrows[1].classList.remove('active');
