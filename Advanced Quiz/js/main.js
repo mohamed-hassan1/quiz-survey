@@ -419,10 +419,10 @@
     dropInputs[i].addEventListener('click', function(e) {
       if (!e.target.closest('.dropdown')) {
         let menu = this.querySelector('.dropdown'),
-            count = globalFun.animationSpeed([5,5,5,5], null),
-            speed = globalFun.animationSpeed(null, [5,5,5,5]),
+            count = globalFun.animationSpeed([4,4,4,4], null),
+            speed = globalFun.animationSpeed(null, [4,4,4,4]),
             currQuestion = questionSection.querySelector('.question.active').getBoundingClientRect().bottom,
-            menuHeight = (window.innerHeight - currQuestion) - 25;
+            menuHeight = Math.max((window.innerHeight - currQuestion) - 25, 175);
 
         if (!this.classList.contains('active')) { // Slide Down
           this.classList.add('active');
