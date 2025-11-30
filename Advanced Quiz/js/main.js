@@ -150,6 +150,63 @@
     globalFun.questionsList = questionList;
   }
 
+  // Check and Get main question
+  function getMainQuestion(dir, count, status) {
+    let allQuestions = globalFun.questionsList.questions,
+          questionsIndex = globalFun.questionsList.static.currentIndex,
+          resQues = null, counter = 0;
+
+    if (dir) { // Next Question
+      // Check for the next question
+      for (let i = questionsIndex + 1; i < allQuestions.length; i++) {
+        if (allQuestions[i].type !== 'child' || allQuestions[i].type === 'child' && !allQuestions[i].ele.classList.contains('question-hidden')) {
+          if (count === 1) {
+            resQues = allQuestions[i].ele;
+            if (status === 'move') {
+              globalFun.questionsList.static.currentIndex = i;
+            }
+            return resQues;
+          } else {
+            if (counter <= 0) {
+              counter++
+              continue;
+            } else {
+              resQues = allQuestions[i].ele;
+              if (status === 'move') {
+                globalFun.questionsList.static.currentIndex = i;
+              }
+              return resQues;
+            }
+          }
+        }
+      }
+    } else { // Previous Question
+      for (let i = questionsIndex - 1; i >= 0; i--) {
+        if (allQuestions[i].type !== 'child' || allQuestions[i].type === 'child' && !allQuestions[i].ele.classList.contains('question-hidden')) {
+          if (count === 1) {
+            resQues = allQuestions[i].ele;
+            if (status === 'move') {
+              globalFun.questionsList.static.currentIndex = i;
+            }
+            return resQues;
+          } else {
+            if (counter <= 0) {
+              counter++
+              continue;
+            } else {
+              resQues = allQuestions[i].ele;
+              if (status === 'move') {
+                globalFun.questionsList.static.currentIndex = i;
+              }
+              return resQues;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   // Window click event
   window.addEventListener('click', function(e) {
     // Hide dropdown menu on click
@@ -314,9 +371,12 @@
           }
         } else if ((arrow.classList.contains('back') && !arrow.classList.contains('inactive')) && e.pointerType !== "") { // back arrow
           arrow.classList.add('inactive');
-          let activeQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele,
-              prevQues = activeQues.previousElementSibling;
-          globalFun.questionsList.static.currentIndex -= 1
+          let allQuestions = globalFun.questionsList.questions,
+              questionsIndex = globalFun.questionsList.static.currentIndex,
+              activeQues = allQuestions[questionsIndex].ele,
+              prevQues = null;
+
+          prevQues = getMainQuestion(false, 1, 'move');
 
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
             quesValidation(false);
@@ -331,7 +391,8 @@
             }
             questionAnimation(activeQues, 'back');
           }
-          if (!activeQues.previousElementSibling.previousElementSibling) {
+
+          if (!getMainQuestion(false, 2, 'check')) {
             arrow.classList.add('inactive');
             arrow.classList.remove('active');
           }
@@ -356,14 +417,18 @@
             currQuestion = questionSection.querySelector('.question.active').getBoundingClientRect().bottom,
             menuHeight = (window.innerHeight - currQuestion) - 25;
 
-        if (!this.classList.contains('active')) {
+        if (!this.classList.contains('active')) { // Slide Down
           this.classList.add('active');
           this.classList.add('arrow-active');
           if (quizWrapper.querySelector('.accept-btn-container.active')) {
             quizWrapper.querySelector('.accept-btn-container.active').style.zIndex = '-1';
           }
-          globalFun.heightAnimation(menuHeight, 0, 'down', menu, count, speed, null);
-        } else {
+          globalFun.heightAnimation(menuHeight, 0, 'down', menu, count, speed, function() {
+            if (menu.querySelector('.filter .txtholder')) {
+              menu.querySelector('.filter .txtholder').focus();
+            }
+          });
+        } else { // Slide Up
           let self = this;
           globalFun.heightAnimation(menuHeight, 0, 'up', menu, count, speed, function() {
             self.classList.remove('active');
@@ -449,7 +514,11 @@
       setTimeout(function() {
         acceptBtn.classList.remove('active');
         acceptBtn.classList.remove('fade');
-        if (!((currQues.previousElementSibling && currQues.previousElementSibling.querySelector('.question-content.choose')) && currQues.previousElementSibling.querySelector('.input-container.done'))) {
+
+        // Check for the previous possible question
+        let prevQues = getMainQuestion(false, 1, 'check');
+
+        if (!((prevQues && prevQues.querySelector('.question-content.choose')) && prevQues.querySelector('.input-container.done'))) {
           nxtBtnArrow.classList.remove('active');
           nxtBtnArrow.classList.add('inactive');
         }
@@ -512,7 +581,7 @@
       document.head.appendChild(curStyle2);
     } else if (status === 'back') {
       progressBarFun(false);
-      let prevQues = ques.previousElementSibling;
+      let prevQues = globalFun.questionsList.questions[globalFun.questionsList.static.currentIndex].ele;
       prevQues.classList.add('active2');
       let quesNum2 = prevQues.offsetHeight * 0.5,
           contentHeight = questionSection.querySelector('.content').offsetHeight * 0.5;
@@ -602,7 +671,7 @@
           questionsTargets = globalFun.questionsList.static.groupTargets,
           currQuestion = allQuestions[questionsIndex].ele,
           nxtQues = null;
-      
+
         // Check for questions group and childs
         if (currQuestion.hasAttribute('question-group')) { // Question Group
           // Get Question answer
@@ -624,17 +693,10 @@
           }
         }
 
-        // Check for the next question
-        for (let i = questionsIndex + 1; i < allQuestions.length; i++) {
-          if (allQuestions[i].type !== 'child' || allQuestions[i].type === 'child' && !allQuestions[i].ele.classList.contains('question-hidden')) {
-            nxtQues = allQuestions[i].ele;
-            globalFun.questionsList.static.currentIndex = i;
-            break;
-          }
-        }
+        // Check and Get next possible question
+        nxtQues = getMainQuestion(true, 1, 'move');
 
       if (nxtQues) {
-        //globalFun.questionsList.static.currentIndex += 1;
         arrows[0].classList.remove('inactive');
         arrows[0].classList.add('active');
         arrows[1].classList.remove('active');
